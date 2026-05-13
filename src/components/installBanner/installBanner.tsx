@@ -22,7 +22,7 @@ export default function InstallBanner() {
   };
 
   useEffect(() => {
-    if (isIOS && !isInStandaloneMode) {
+    if (isIOS() && !isInStandaloneMode) {
       showBannerHandler();
     }
 
