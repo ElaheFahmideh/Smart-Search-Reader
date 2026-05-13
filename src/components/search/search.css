@@ -42,12 +42,12 @@
   color: var(--bg);
 }
 
-.search__result-actions {
+.search__result-navigator {
   display: flex;
   flex-direction: column;
 }
 
-.search__result-actions button {
+.search__result-navigator button {
   cursor: pointer;
   margin-right: 40px;
   font-size: 20px;
@@ -84,7 +84,6 @@ mark.match-mark-active {
   }
 }
 
-
-.text__wrapper{
-  margin-top:30px;
+.text__wrapper {
+  margin-top: 30px;
 }

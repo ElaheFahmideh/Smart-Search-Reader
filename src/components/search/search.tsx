@@ -1,26 +1,14 @@
 import { useEffect, useMemo, useState } from "react";
 import { escapeRegExp } from "@utils";
 import { useDebounce } from "@hooks/useDebounce";
+import SearchInput from "./searchInput";
+import SuggestionList from "./suggestionList";
+import SearchResult from "./searchResult";
+import HighlightedText from "./highlightedText";
 import "./search.css";
 
 const TEXT: string =
   "React is a JavaScript library for building user interfaces. React makes UI development easier. Many developers use React for web apps.React is a JavaScript library for building user interfaces. React makes UI development easier. Many developers use React for web apps.React is a JavaScript library for building user interfaces. React makes UI development easier. Many developers use React for web apps.React is a JavaScript library for building user interfaces. React makes UI development easier. Many developers use React for web apps.React is a JavaScript library for building user interfaces. React makes UI development easier. Many developers use React for web apps.React is a JavaScript library for building user interfaces. React makes UI development easier. Many developers use React for web apps.. React makes UI development easier. Many developers use React for web apps.React is a JavaScript library for building user interfaces. React makes UI development easier. Many developers use React for web apps.. React makes UI development easier. Many developers use React for web apps.React is a JavaScript library for building user interfaces. React makes UI development easier. Many developers use React for web apps.. React makes UI development easier. Many developers use React for web apps.React is a JavaScript library for building user interfaces. React makes UI development easier. Many developers use React for web apps.. React makes UI development easier. Many developers use React for web apps.React is a JavaScript library for building user interfaces. React makes UI development easier. Many developers use React for web apps React is a JavaScript library for building user interfaces. React makes UI development easier. Many developers use React for web apps.React is a JavaScript library for building user interfaces. React makes UI development easier. Many developers use React for web apps.React is a JavaScript library for building user interfaces. React makes UI development easier.React is a JavaScript library for building user interfaces. React makes UI development easier. Many developers use React for web apps.React is a JavaScript library for building user interfaces. React makes UI development easier. Many developers use React for web apps.React is a JavaScript library for building user interfaces. React makes UI development easier  Many developers use React for web apps.React is a JavaScript library for building user interfaces. React makes UI development easier Many developers use React for web apps.React is a JavaScript library for building user interfaces. React makes UI development easier Many developers use React for web apps.React is a JavaScript library for building user interfaces. React makes UI development easier Many developers use React for web apps.React is a JavaScript library for building user interfaces. React makes UI development easier Many developers use React for web apps.React is a JavaScript library for building user interfaces. React makes UI development easier";
-
-type TSearchInput = {
-  query: string;
-  setQuery: React.Dispatch<React.SetStateAction<string>>;
-  setShowSuggestions: React.Dispatch<React.SetStateAction<boolean>>;
-};
-
-type TSuggestionList = {
-  suggestions: string[];
-  handleChooseSuggestion: (arg: string) => void;
-};
-
-type TActionButton = {
-  action: () => void;
-  children: string;
-};
 
 export default function SearchNavigator() {
   const [query, setQuery] = useState<string>("");
@@ -52,7 +40,6 @@ export default function SearchNavigator() {
   }, [parts, debouncedQuery]);
 
   const suggestions = useMemo(() => {
-    setActiveIndex(0);
     if (!query.trim()) return [];
 
     return SUGGESTION_WORDS.filter((word: string) =>
@@ -85,6 +72,10 @@ export default function SearchNavigator() {
     }
   }, [activeIndex]);
 
+  useEffect(() => {
+    setActiveIndex(0);
+  }, [query]);
+
   let matchIndex = -1;
 
   return (
@@ -107,83 +98,20 @@ export default function SearchNavigator() {
       </div>
 
       {debouncedQuery && (
-        <div className="search__result">
-          {matchesCount > 0 ? (
-            <>
-              <p>{`Result ${activeIndex + 1} of ${matchesCount}`}</p>
-              <div className="search__result-actions">
-                <ActionButton action={goPrev}>&#8963;</ActionButton>
-                <ActionButton action={goNext}>&#8964;</ActionButton>
-              </div>
-            </>
-          ) : (
-            <p>No results found. Please try different keywords</p>
-          )}
-        </div>
+        <SearchResult
+          matchesCount={matchesCount}
+          activeIndex={activeIndex}
+          goPrev={goPrev}
+          goNext={goNext}
+        />
       )}
 
-      <div className="text__wrapper">
-        {parts.map((part: string, index: number) => {
-          const isMatch =
-            debouncedQuery &&
-            part.toLowerCase() === debouncedQuery.toLowerCase();
-
-          if (isMatch) {
-            matchIndex++;
-            const isActive = matchIndex === activeIndex;
-            return (
-              <mark
-                key={`part-${index}`}
-                id={`match-mark-${matchIndex}`}
-                className={isActive ? "match-mark-active" : ""}
-              >
-                {part}
-              </mark>
-            );
-          }
-
-          return <span key={index}>{part}</span>;
-        })}
-      </div>
+      <HighlightedText
+        parts={parts}
+        debouncedQuery={debouncedQuery}
+        matchIndex={matchIndex}
+        activeIndex={activeIndex}
+      />
     </div>
   );
-}
-
-function SearchInput({ query, setQuery, setShowSuggestions }: TSearchInput) {
-  return (
-    <input
-      type="text"
-      name="search"
-      placeholder="Search anything..."
-      className="search search__input"
-      value={query}
-      onChange={(e) => {
-        setQuery(e.target.value);
-        setShowSuggestions(true);
-      }}
-    />
-  );
-}
-
-function SuggestionList({
-  suggestions,
-  handleChooseSuggestion,
-}: TSuggestionList) {
-  return (
-    <ul className="search__suggestions-list">
-      {suggestions.map((suggestion: string, index: number) => (
-        <li
-          key={`${suggestion}-${index}`}
-          onClick={() => handleChooseSuggestion(suggestion)}
-          className="search__suggestions-item"
-        >
-          {suggestion}
-        </li>
-      ))}
-    </ul>
-  );
-}
-
-function ActionButton({ action, children }: TActionButton) {
-  return <button onClick={action}>{children}</button>;
 }
