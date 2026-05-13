@@ -5,10 +5,8 @@ import SearchInput from "./searchInput";
 import SuggestionList from "./suggestionList";
 import SearchResult from "./searchResult";
 import HighlightedText from "./highlightedText";
+import article from "@/assets/data/article.txt?raw";
 import "./index.css";
-
-const TEXT: string =
-  "React is a JavaScript library for building user interfaces. React makes UI development easier. Many developers use React for web apps.React is a JavaScript library for building user interfaces. React makes UI development easier. Many developers use React for web apps.React is a JavaScript library for building user interfaces. React makes UI development easier. Many developers use React for web apps.React is a JavaScript library for building user interfaces. React makes UI development easier. Many developers use React for web apps.React is a JavaScript library for building user interfaces. React makes UI development easier. Many developers use React for web apps.React is a JavaScript library for building user interfaces. React makes UI development easier. Many developers use React for web apps.. React makes UI development easier. Many developers use React for web apps.React is a JavaScript library for building user interfaces. React makes UI development easier. Many developers use React for web apps.. React makes UI development easier. Many developers use React for web apps.React is a JavaScript library for building user interfaces. React makes UI development easier. Many developers use React for web apps.. React makes UI development easier. Many developers use React for web apps.React is a JavaScript library for building user interfaces. React makes UI development easier. Many developers use React for web apps.. React makes UI development easier. Many developers use React for web apps.React is a JavaScript library for building user interfaces. React makes UI development easier. Many developers use React for web apps React is a JavaScript library for building user interfaces. React makes UI development easier. Many developers use React for web apps.React is a JavaScript library for building user interfaces. React makes UI development easier. Many developers use React for web apps.React is a JavaScript library for building user interfaces. React makes UI development easier.React is a JavaScript library for building user interfaces. React makes UI development easier. Many developers use React for web apps.React is a JavaScript library for building user interfaces. React makes UI development easier. Many developers use React for web apps.React is a JavaScript library for building user interfaces. React makes UI development easier  Many developers use React for web apps.React is a JavaScript library for building user interfaces. React makes UI development easier Many developers use React for web apps.React is a JavaScript library for building user interfaces. React makes UI development easier Many developers use React for web apps.React is a JavaScript library for building user interfaces. React makes UI development easier Many developers use React for web apps.React is a JavaScript library for building user interfaces. React makes UI development easier Many developers use React for web apps.React is a JavaScript library for building user interfaces. React makes UI development easier";
 
 export default function SmartSearch() {
   const [query, setQuery] = useState<string>("");
@@ -18,18 +16,19 @@ export default function SmartSearch() {
 
   const SUGGESTION_WORDS = Array.from(
     new Set(
-      TEXT.toLowerCase()
+      article
+        .toLowerCase()
         .replace(/[^\w\s]/g, "")
         .split(/\s+/),
     ),
   );
 
   const parts = useMemo(() => {
-    if (!debouncedQuery) return [TEXT];
+    if (!debouncedQuery) return [article];
 
     const regex = new RegExp(`(${escapeRegExp(debouncedQuery)})`, "gi");
-    return TEXT.split(regex);
-  }, [TEXT, debouncedQuery]);
+    return article.split(regex);
+  }, [article, debouncedQuery]);
 
   const matchesCount = useMemo(() => {
     if (!debouncedQuery) return 0;
