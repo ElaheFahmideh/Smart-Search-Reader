@@ -1,0 +1,32 @@
+.install__banner {
+  position: fixed;
+  top: 20px;
+  right: 10px;
+  width: min(450px, calc(100% - 32px));
+  background: var(--bg-dark);
+  color: var(--bg);
+  padding: 16px;
+  border-radius: 8px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.2);
+  z-index: 9999;
+}
+
+.install__banner-actions {
+  display: flex;
+  gap: 10px;
+}
+
+.install__banner button {
+  border: none;
+  padding: 8px 14px;
+  border-radius: 8px;
+  cursor: pointer;
+}
+
+.install__banner button {
+  background: var(--primary);
+  color: var(--bg);
+}
