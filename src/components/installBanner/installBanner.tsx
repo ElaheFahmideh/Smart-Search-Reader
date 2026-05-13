@@ -26,10 +26,16 @@ export default function InstallBanner() {
       showBannerHandler();
     }
 
-    window.addEventListener("beforeinstallprompt", installPromptHandler);
+    window.addEventListener(
+      "beforeinstallprompt",
+      installPromptHandler as EventListener,
+    );
 
     return () => {
-      window.removeEventListener("beforeinstallprompt", installPromptHandler);
+      window.removeEventListener(
+        "beforeinstallprompt",
+        installPromptHandler as EventListener,
+      );
       if (timerRef.current) clearTimeout(timerRef.current);
     };
   }, []);
