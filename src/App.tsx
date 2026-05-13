@@ -1,7 +1,14 @@
 import "./App.css";
+import Search from "@components/search/search";
+import InstallBanner from "@components/installBanner/installBanner";
 
 function App() {
-  return <></>;
+  return (
+    <>
+      <InstallBanner />
+      <Search />
+    </>
+  );
 }
 
 export default App;
